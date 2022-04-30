@@ -41,7 +41,7 @@ module Web.Google.Translate
        , Language            (..)
        ) where
 ------------------------------------------------------------------------------
-import           Data.Aeson
+import           Data.Aeson hiding (Key)
 import           Data.Proxy
 import           Data.Text           (Text)
 import qualified Data.Text           as T
@@ -212,7 +212,7 @@ detect
   -> IO (Either ClientError DetectionResponse)
 detect mgr key body =
   runClientM (detect' (Just key) (Just body))
-             (ClientEnv mgr googleApis Nothing)
+             (mkClientEnv mgr googleApis)
 ------------------------------------------------------------------------------
 -- | Perform translation from `Source` language to `Target` langauge.
 -- If `Source` not specified, attempt detection of `Lang`
@@ -225,7 +225,7 @@ translate
   -> IO (Either ClientError TranslationResponse)
 translate mgr key src trgt body =
   runClientM (translate' (Just key) src (Just trgt) (Just body))
-             (ClientEnv mgr googleApis Nothing)
+             (mkClientEnv mgr googleApis)
 ------------------------------------------------------------------------------
 -- | Retrieve all languages
 -- If `Target` specified, return langauge name in `Target` langauge.
@@ -236,7 +236,7 @@ getLanguages
   -> IO (Either ClientError LanguageResponse)
 getLanguages mgr key trgt =
   runClientM (getLanguages' (Just key) trgt)
-             (ClientEnv mgr googleApis Nothing)
+             (mkClientEnv mgr googleApis)
 ------------------------------------------------------------------------------
 instance Show Lang where
   show Afrikaans          = "af"
